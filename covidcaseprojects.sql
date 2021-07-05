@@ -61,7 +61,6 @@ with popvsvac (continent,location,date,population, new_vaccinations,rollingpeopl
 as(
 select d.continent,d.location,d.date,d.population,v.new_vaccinations, 
 sum(cast(v.new_vaccinations as int)) over (partition by	d.location order by d.location) as rollingpeoplevaccinated
---rollingpeoplevaccinated/d.population ********* since we can not use alias name of column in calculation so creating CTE or temp table
 from COVID_DEATH d join COVID_VACCINATION v on d.location=v.location and d.date=v.date
 where d.continent is not null
 --order by 1,3,2
@@ -74,7 +73,6 @@ order by 1,3
 create view popvsvac as
 select d.continent,d.location,d.date,d.population,v.new_vaccinations, 
 sum(cast(v.new_vaccinations as int)) over (partition by	d.location order by d.location) as rollingpeoplevaccinated
---rollingpeoplevaccinated/d.population ********* since we can not use alias name of column in calculation so creating CTE or temp table
 from COVID_DEATH d join COVID_VACCINATION v on d.location=v.location and d.date=v.date
 where d.continent is not null
 --order by 1,3,2

@@ -1,0 +1,36 @@
+--Problem Statement:-
+/*Transatcion_tbl Table has four columns CustID, TranID, TranAmt, and  TranDate. 
+User has to display all these fields along with maximum TranAmt for each CustID 
+and ratio of TranAmt and maximum TranAmt for each transaction.
+*/
+
+
+select * from Transaction_Tbl
+
+with maxvalue
+as
+(
+select custid, MAX(TranAmt) as maxtransaction from Transaction_Tbl
+group by custid
+)
+
+select T.custid,Tranid,Tranamt,Trandate,maxtransaction, Tranamt/maxtransaction as transratio
+from Transaction_Tbl T join maxvalue M on M.custid= T.custid
+
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+
+select *, 
+MaxTranAmt = max(TranAmt) over(partition by CustID),
+Ratio = TranAmt / (max(TranAmt) over(partition by CustID)),
+TranDate
+from  Transaction_Tbl
+
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+
+With cte as
+(select *, MAX(TranAmt) OVER(Partition by CustID order by CustID) as max_transaction_amount
+from Transaction_Tbl)
+
+Select *, (TranAmt/max_transaction_amount) as ratio
+From cte
+ 
